@@ -6,6 +6,7 @@ import { SignUp } from './pages/signup/signup';
 import { ProtectedRoute } from './routes/protectedRoute';
 import { Feed } from './pages/feed/feed';
 import { Verified } from './pages/verified/verified';
+import { Breed } from './pages/breed/breed';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/verified" element={<Verified />} />
           <Route
             path="/feed"
             element={
@@ -22,7 +24,19 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Verified />} />
+          <Route
+            path="/breed"
+            element={
+              <ProtectedRoute>
+                <Breed />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Feed />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Router>
     </AuthProvider>

@@ -4,14 +4,15 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string,
   helperText?: string,
-  error?: string
+  error?: string,
+  containerClassName?: string,
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ containerClassName, className, type, ...props }, ref) => {
 
     return (
-      <div className="relative h-[70px] my-2">
+      <div className={`relative h-[70px] my-2 ${containerClassName}`}>
         {props.label && <span className="text-sm text-black-90 absolute left-2 -top-3.5 z-50 bg-white px-2">{props.label} {props.required && <span className="text-red-500">*</span>}</span>}
         <input
           type={type}

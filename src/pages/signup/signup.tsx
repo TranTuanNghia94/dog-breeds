@@ -2,7 +2,7 @@ import React from 'react'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import signupSvg from '../../assets/svg/signup.svg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IUserRegister } from './interface'
 import { useAuth } from '../../contexts/Auth/AuthContext'
 
@@ -12,6 +12,7 @@ type Props = {
 
 export const SignUp = (props: Props) => {
     const [account, setAccount] = React.useState<IUserRegister>()
+    const navigate = useNavigate();
 
     const { signup } = useAuth()
 
@@ -26,7 +27,9 @@ export const SignUp = (props: Props) => {
         e.preventDefault()
         try {
             const result = await signup(account?.email as string, account?.password as string)
-            console.log(result)
+            if (result) {
+                navigate('/verified')
+            }
         } catch (error) {
             console.log(error)
         }
