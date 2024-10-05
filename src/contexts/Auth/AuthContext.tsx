@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../../firebase";
 import { AuthContextType, AuthProviderProps } from "./interface";
@@ -32,16 +32,28 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
 
     const signup = async (email: string, password: string) => {
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            sendEmailVerification(result.user)
+            return result
         } catch (error) {
             throw new Error(error instanceof Error ? error.message : 'Signup failed');
         }
     }
 
 
+    const resendEmailVerification = async (user: User) => {
+        try {
+            await sendEmailVerification(user)
+        } catch (error) {
+            throw new Error(error instanceof Error ? error.message : 'Resend email verification failed');
+        }
+    }
+
+
     const login = async (email: string, password: string) => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            return result
         } catch (error) {
             throw new Error(error instanceof Error ? error.message : 'Login failed');
         }
@@ -62,6 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
         signup,
         login,
         logout,
+        resendEmailVerification
     }
 
 
