@@ -12,6 +12,7 @@ export const Login = (props: Props) => {
   const { login, loading } = useAuth()
   const navigate = useNavigate();
   const [account, setAccount] = React.useState<IUserAuth>()
+  const [error, setError] = React.useState<string>('')
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +26,13 @@ export const Login = (props: Props) => {
 
     try {
       const result = await login(account?.email as string, account?.password as string)
-      console.log('result', result)
       if (result) {
         navigate('/feed')
       }
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        setError(error.message)
+      }
     }
   }
 
@@ -47,6 +49,7 @@ export const Login = (props: Props) => {
               <Input label='Email' required onChange={handleChange} name='email' />
               <Input label='Password' required type='password' onChange={handleChange} name='password' />
             </div>
+            {error && <div className='text-red-500 text-center text-sm my-2'>{error}</div>}
             <Button size='md' type='submit'>Login</Button>
           </form>
 

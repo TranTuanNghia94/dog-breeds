@@ -12,6 +12,7 @@ type Props = {
 
 export const SignUp = (props: Props) => {
     const [account, setAccount] = React.useState<IUserRegister>()
+    const  [error, setError] = React.useState<string>('')
     const navigate = useNavigate();
 
     const { signup } = useAuth()
@@ -31,7 +32,9 @@ export const SignUp = (props: Props) => {
                 navigate('/verified')
             }
         } catch (error) {
-            console.log(error)
+            if (error instanceof Error) {
+                setError(error.message)
+            }
         }
     }
 
@@ -49,6 +52,7 @@ export const SignUp = (props: Props) => {
                             <Input onChange={handleChange} name='email' label='Email' required maxLength={200} minLength={10} />
                             <Input onChange={handleChange} name='password' label='Password' required type='password' maxLength={150} minLength={5} />
                         </div>
+                        {error && <div className='text-red-500 text-center text-sm my-2'>{error}</div>}
                         <Button size='md' type='submit'>Register</Button>
                     </form>
 

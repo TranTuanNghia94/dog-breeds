@@ -22,7 +22,9 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user);
+            if (user?.emailVerified) {
+                setUser(user);
+            }
             setLoading(false);
         });
 
@@ -35,11 +37,21 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             setItem(KEY_STORAGE.USER_VERIFICATION, result.user)
             sendEmailVerification(result.user)
-            
+
             return result.user
-        } catch (error) {
-            
-            throw new Error(error instanceof Error ? error.message : "Signup failed");
+        } catch (error: any) {
+            const errorCode = error.code;
+
+            switch (errorCode) {
+                case 'auth/email-already-in-use':
+                    throw new Error("Email already in use");
+                case 'auth/weak-password':
+                    throw new Error("Password should be at least 6 characters");
+                case 'auth/invalid-email':
+                    throw new Error("Invalid email address");
+                default:
+                    throw new Error("Signup failed");
+            }
         }
     }
 
@@ -56,15 +68,23 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
     const login = async (email: string, password: string): Promise<string> => {
         try {
             const result = await signInWithEmailAndPassword(auth, email, password);
-            
+
             if (result.user && !result.user.emailVerified) {
                 throw new Error("User not verified email");
             }
             setUser(result.user)
             setItem(KEY_STORAGE.USER, result.user)
             return result.user.email as string
-        } catch (error) {
-            throw new Error(error instanceof Error ? error.message : "Login failed");
+        } catch (error: any) {
+            const errorCode = error.code;
+            switch (errorCode) {
+                case 'auth/user-not-found':
+                    throw new Error("User not found");
+                case 'auth/wrong-password':
+                    throw new Error("Wrong password");
+                default:
+                    throw new Error("Invalid login credentials");
+            }
         }
     }
 

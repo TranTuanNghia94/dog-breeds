@@ -11,10 +11,8 @@ const buttonVariants = cva(
                 default: "border border-yellow-600 bg-yellow-600 text-grey-900 hover:bg-yellow-800 active:bg-yellow-600",
                 outline:
                     "border border-yellow-600 text-yellow-600 hover:bg-yellow-50 active:bg-yellow-100",
-                // secondary:
-                //     "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-                // ghost: "hover:bg-accent hover:text-accent-foreground",
-                // link: "text-primary underline-offset-4 hover:underline",
+                danger: 
+                    "border border-red-600 text-red-600 hover:bg-red-50 active:bg-red-100",
             },
             size: {
                 default: "h-[32px] px-4 py-2",

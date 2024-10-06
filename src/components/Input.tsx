@@ -12,7 +12,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ containerClassName, className, type, ...props }, ref) => {
 
     return (
-      <div className={`relative h-[70px] my-2 ${containerClassName}`}>
+      <div className={`relative h-[50px] my-4 ${containerClassName}`}>
         {props.label && <span className="text-sm text-black-90 absolute left-2 -top-3.5 z-50 bg-white px-2">{props.label} {props.required && <span className="text-red-500">*</span>}</span>}
         <input
           type={type}
@@ -20,7 +20,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {props.helperText && <div className="absolute bottom-0 left-2 text-sm text-black-30">{props.helperText}</div>}
       </div>
     )
   }
